@@ -71,7 +71,7 @@ The script processes a user-specified set of residues and generates histogram pl
   **Utility:** Combines all residue plots into one figure for side-by-side comparison; any unused subplot is cleared.  
   **Example:** `2 3`
 
-- **-ds, --dot_size**, **-dec, --dot_edge_color**, **-dpt, --dot_proximity_threshold**  
+- **-ds, --dot_size**, **-dec, --dot_edge_color**, **-dpt, --dot_proximity_threshold**  (OPTIONAL)
   **Description:** Adjust the size, edge color, and spacing of dots overlaid on the histograms (used for reference models).  
   **Utility:** Fine-tunes the visual overlay to avoid clutter and improve readability.
 
