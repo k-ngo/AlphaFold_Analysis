@@ -244,7 +244,7 @@ def main():
                     if chain.id in chains_to_use:
                         for r in residues:
                             try:
-                                res = chain[(" ", r - predicted_offset, " ")]
+                                res = chain[(" ", r + predicted_offset, " ")]
                                 resname = res.get_resname()
                                 residue_labels[r] = f"{three_to_one.get(resname.upper(), '?')}{r}"
                             except Exception:
