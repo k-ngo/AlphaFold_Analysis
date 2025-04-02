@@ -114,7 +114,7 @@ ______________________________________________________
 
 ## Overview
 
-`clustering_pdb_AF_models.py` is a command-line tool that clusters AlphaFold-predicted PDB models based on the structural similarity of user-specified residues. The script calculates the all-atom RMSD between each pair of models—averaging the values over specified chains—and then clusters the models using the DBSCAN algorithm. It outputs detailed cluster information and generates a bar plot showing the average pLDDT (prediction confidence score stored in the B-factor) for each cluster.
+`clustering_pdb_AF_models.py` is designed to help cluster AlphaFold-predicted PDB models based on the structural similarity of user-specified residues. The script calculates the all-atom RMSD between each pair of models—averaging the values over specified chains—and then clusters the models using the DBSCAN algorithm. It outputs detailed cluster information and generates a bar plot showing the average pLDDT (prediction confidence score stored in the B-factor) for each cluster.
 
 ![clustering_pdb_AF_models](output/clustering_pdb_by_SF_inactivated_sampling.png)
 
