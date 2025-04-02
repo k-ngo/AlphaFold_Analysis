@@ -14,6 +14,8 @@ ______________________________________________________
 Optionally, it can also incorporate reference PDB models for comparison.
 The script processes a user-specified set of residues and generates histogram plots showing the distribution of the chosen dihedral angle.
 
+![plot_dihedral_angles_AF_models](output/dihedral_angles_inactivated_sampling.png)
+
 ## Command-Line Arguments and Their Utility
 
 - **-p, --predicted_pattern** (REQUIRED)  
@@ -106,5 +108,85 @@ For instance, if your interest lies in analyzing the ψ angles for residues 100,
 `python plot_dihedral_angles_AF_models.py -p alphafold_models/*rank*.pdb --residues 100,101,102 --angle_type psi`
 
 This command focuses on the ψ angles of a different set of residues. Running the script with --angle_type psi switches the analysis to the ψ dihedral angle, allowing you to probe backbone conformations from a different perspective.
+
+______________________________________________________
+# clustering_pdb_AF_models.py
+
+## Overview
+
+`clustering_pdb_AF_models.py` is a command-line tool that clusters AlphaFold-predicted PDB models based on the structural similarity of user-specified residues. The script calculates the all-atom RMSD between each pair of models—averaging the values over specified chains—and then clusters the models using the DBSCAN algorithm. It outputs detailed cluster information and generates a bar plot showing the average pLDDT (prediction confidence score stored in the B-factor) for each cluster.
+
+![clustering_pdb_AF_models](output/clustering_pdb_by_SF_inactivated_sampling.png)
+
+## Command-Line Arguments and Their Utility
+
+- **`-p, --pdb_pattern`**  
+  **Description:** Glob pattern to match predicted PDB files.  
+  **Utility:** Specifies the input set of PDB models to be clustered.  
+  **Example:** `alphafold_models/*rank*.pdb`
+
+- **`--residues`**  
+  **Description:** Comma-separated list of residue numbers to use for clustering.  
+  **Utility:** Focuses the RMSD calculation on functionally or structurally relevant regions.  
+  **Example:** `227,228,229,230,231`
+
+- **`-c, --chains`**  
+  **Description:** Comma-separated list of chain IDs to process.  
+  **Utility:** Specifies which chains to include in the RMSD calculation. This is especially useful for homooligomeric complexes (e.g., homotetramers).  
+  **Example:** `A,B,C,D`
+
+- **`--rmsd_threshold`**  
+  **Description:** RMSD threshold for clustering (eps value for DBSCAN).  
+  **Utility:** Determines the maximum RMSD for models to be considered similar; tuning this parameter adjusts the cluster granularity.  
+  **Example:** `0.35`
+
+- **`--min_cluster_size`**  
+  **Description:** Minimum number of models for a cluster.  
+  **Utility:** Clusters with fewer members than this threshold are merged into an outlier cluster to reduce noise.  
+  **Example:** `3`
+
+- **`--results_file`**  
+  **Description:** Filename for saving/loading clustering results in JSON format.  
+  **Utility:** Allows reuse of previously computed clustering results to avoid recalculation.  
+  **Example:** `pdb_cluster_results.json`
+
+- **`--overwrite`**  
+  **Description:** Flag to force overwriting the saved clustering results file.  
+  **Utility:** Useful when you want to re-run the clustering with updated parameters even if prior results exist.  
+  **Example:** Include `--overwrite` in the command line.
+
+## Usage Scenarios and Examples
+
+### 1. Basic Clustering of Predicted Models
+
+Cluster predicted models using the default set of residues.
+
+`python clustering_pdb_AF_models.py -p alphafold_models/*rank*.pdb --residues 227,228,229,230,231`
+
+This command computes pairwise RMSD values over residues 227–231 for all predicted models and clusters them using the default RMSD threshold. It’s ideal for an initial exploration of structural variability in a specific region of the protein.
+
+### 2. Clustering Homotetramer Models
+
+When clustering homotetramer models, specify all four chains so that the RMSD is averaged over chains A, B, C, and D.
+
+`python clustering_pdb_AF_models.py -p alphafold_models/*rank*.pdb --residues 227,228,229,230,231 -c A,B,C,D`
+
+For homotetrameric proteins, each model contains four identical chains. By specifying -c A,B,C,D, the script computes the RMSD for each chain and averages them, providing a more robust measure of overall structural similarity for the entire oligomeric assembly.
+
+### 3. Adjusting Clustering Granularity
+
+Fine-tune the clustering by adjusting the RMSD threshold and setting a higher minimum cluster size.
+
+`python clustering_pdb_AF_models.py -p alphafold_models/*rank*.pdb --residues 227,228,229,230,231 --rmsd_threshold 0.30 --min_cluster_size 5`
+
+Lowering the RMSD threshold to 0.30 makes the clustering more stringent, resulting in clusters with higher internal similarity. Increasing the minimum cluster size to 5 filters out smaller, potentially insignificant clusters by merging them into an outlier group.
+
+### 4. Using Saved Clustering Results
+
+If you have already computed clustering results, load them from a JSON file to save time on re-computation.
+
+`python clustering_pdb_AF_models.py -p alphafold_models/*rank*.pdb --residues 227,228,229,230,231 --results_file pdb_cluster_results.json`
+
+Loading previously saved results avoids the computationally intensive step of recalculating all pairwise RMSD values, which is particularly beneficial when working with a large number of models.
 
 
