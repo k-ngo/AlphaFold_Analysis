@@ -16,7 +16,7 @@ The script processes a user-specified set of residues and generates histogram pl
 
 ## Command-Line Arguments and Their Utility
 
-- **-p, --predicted_pattern** (Required)  
+- **-p, --predicted_pattern** (REQUIRED)  
   **Description:** Glob pattern to match predicted PDB files.  
   **Utility:** Ensures the script processes the correct set of AlphaFold models.  
   **Example:** `alphafold_models/*rank*.pdb`
