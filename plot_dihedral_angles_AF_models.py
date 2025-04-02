@@ -169,7 +169,7 @@ def main():
                 for r in residues:
                     try:
                         # Adjust residue number for predicted models.
-                        res = chain[(" ", r - predicted_offset, " ")]
+                        res = chain[(" ", r + predicted_offset, " ")]
                         if angle_type == "phi":
                             row[f"Phi_{r}"] = get_phi_angle(res)
                         else:
