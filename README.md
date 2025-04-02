@@ -1,6 +1,8 @@
 # AlphaFold_Analysis
 Scripts for analyzing AlphaFold predicted models
+
 For questions, please email khoango@ucdavis.edu
+
 Please cite: https://doi.org/10.7554/eLife.104901.1
 
 ______________________________________________________
